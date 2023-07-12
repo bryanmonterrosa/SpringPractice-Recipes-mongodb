@@ -1,0 +1,22 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/aq_dev
+        username: aq_dev_user
+        password: quazar
+    sql:
+        init:
+            platform: mysql
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        database-platform: org.hibernate.dialect.MySQLDialect
+        database: mysql
+        show-sql: true
+        # properties:    Use this to generate the database schema
+        #     jakarta:
+        #         persistence:
+        #             schema-generation:
+        #                 create-source: metadata
+        #                 scripts:
+        #                     action: create
+        #                     create-target: quazar_database_create.sql
