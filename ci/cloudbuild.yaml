@@ -1,0 +1,71 @@
+options:
+  env:
+    - "MAVEN_OPTS=-Xmx3200m"
+steps:
+  # Retrieve cache
+  - name: gcr.io/cloud-builders/gsutil
+    id: Get M2 Cache
+    args:
+      [
+        "cp",
+        "gs://$_GOOGLE_CLOUD_BUCKET/recipes-mongodb-m2.tar.gz",
+        "recipes-mongodb-m2.tar.gz",
+      ]
+    allowFailure: true
+
+  - name: gcr.io/cloud-builders/gsutil
+    id: Expand M2 Cache
+    entrypoint: "tar"
+    args: ["xpzf", "recipes-mongodb-m2.tar.gz"]
+    allowFailure: true
+
+  # Build the Maven project
+  - name: "gcr.io/cloud-builders/mvn"
+    id: Build
+    args:
+      [
+        "clean",
+        "install",
+        "-DskipTests",
+        "-Dmaven.repo.local=/workspace/.m2/repository",
+        "org.jacoco:jacoco-maven-plugin:prepare-agent",
+      ]
+
+  - name: "gcr.io/cloud-builders/mvn"
+    id: Dependencies
+    args:
+      ["dependency:go-offline", "-Dmaven.repo.local=/workspace/.m2/repository"]
+
+  # Run tests
+  - name: "gcr.io/cloud-builders/mvn"
+    id: Tests
+    args: ["integration-test", "-Dmaven.repo.local=/workspace/.m2/repository"]
+
+  # Save cache to Google Cloud bucket
+  - name: gcr.io/cloud-builders/gsutil
+    id: Compress M2 Cache
+    entrypoint: "tar"
+    args: ["cpzf", "recipes-mongodb-m2.tar.gz", ".m2"]
+
+  - name: gcr.io/cloud-builders/gsutil
+    id: Save M2 Cache
+    args:
+      [
+        "cp",
+        "recipes-mongodb-m2.tar.gz",
+        "gs://$_GOOGLE_CLOUD_BUCKET/recipes-mongodb-m2.tar.gz",
+      ]
+
+  # Send report to codecov
+
+  - name: "gcr.io/cloud-builders/curl"
+    args: ["-Os", "https://uploader.codecov.io/latest/linux/codecov"]
+
+  - name: "gcr.io/cloud-builders/curl"
+    entrypoint: "chmod"
+    args: ["+x", "codecov"]
+
+  # Docs at https://docs.codecov.com/docs/codecov-uploader#uploader-command-line-arguments
+  - name: "gcr.io/cloud-builders/curl"
+    entrypoint: "./codecov"
+    args: ["-t", "$_CODECOV_TOKEN","-C","$COMMIT_SHA"]

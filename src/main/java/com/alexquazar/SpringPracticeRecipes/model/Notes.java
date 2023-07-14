@@ -1,27 +1,14 @@
 package com.alexquazar.SpringPracticeRecipes.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToOne;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@Entity
-@EqualsAndHashCode(exclude = {"recipe"})
+@Getter
+@Setter
 public class Notes {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne
+    private String id;
     private Recipe recipe;
-
-    @Lob
     private String recipeNotes;
 
 }
