@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -20,12 +21,14 @@ import com.alexquazar.SpringPracticeRecipes.model.UnitOfMeasure;
 import com.alexquazar.SpringPracticeRecipes.repositories.CategoryRepository;
 import com.alexquazar.SpringPracticeRecipes.repositories.RecipeRepository;
 import com.alexquazar.SpringPracticeRecipes.repositories.UnitOfMeasureRepository;
+import com.alexquazar.SpringPracticeRecipes.repositories.reactive.CategoryReactiveRepository;
+import com.alexquazar.SpringPracticeRecipes.repositories.reactive.RecipeReactiveRepository;
+import com.alexquazar.SpringPracticeRecipes.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Profile("default")
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
@@ -42,13 +45,14 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
         loadCategories();
         loadUom();
         recipeRepository.saveAll(getRecipes());
         log.debug("Loading Bootstrap Data");
     }
 
-    private void loadCategories(){
+    private void loadCategories() {
         Category cat1 = new Category();
         cat1.setDescription("American");
         categoryRepository.save(cat1);
@@ -66,7 +70,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         categoryRepository.save(cat4);
     }
 
-    private void loadUom(){
+    private void loadUom() {
         UnitOfMeasure uom1 = new UnitOfMeasure();
         uom1.setDescription("Teaspoon");
         unitOfMeasureRepository.save(uom1);
@@ -240,7 +244,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         tacosRecipe.addIngredient(new Ingredient("Cayenne pepper", new BigDecimal(.25), teaSpoonUom));
         tacosRecipe.addIngredient(new Ingredient("Lime or Lemon Juice", new BigDecimal(.25), cupsUom));
         tacosRecipe.addIngredient(new Ingredient("Olive oil", new BigDecimal(1), teaSpoonUom));
-        tacosRecipe.addIngredient(new Ingredient("Skinless, boneless chicken thighs", new BigDecimal(4), tableSpoonUom));
+        tacosRecipe
+                .addIngredient(new Ingredient("Skinless, boneless chicken thighs", new BigDecimal(4), tableSpoonUom));
         tacosRecipe.addIngredient(new Ingredient("Package corn tortillas", new BigDecimal(1), eachUom));
 
         tacosRecipe.getCategories().add(americanCategory);
