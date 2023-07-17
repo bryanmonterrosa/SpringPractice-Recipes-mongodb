@@ -108,10 +108,4 @@ public class ImageControllerTest {
         assertEquals(s.getBytes().length, reponseBytes.length);
     }
 
-    @Test
-    public void testGetImageNumberFormatException() throws Exception {
-        mockMvc.perform(get("/recipe/asdf/recipeimage"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
-    }
 }

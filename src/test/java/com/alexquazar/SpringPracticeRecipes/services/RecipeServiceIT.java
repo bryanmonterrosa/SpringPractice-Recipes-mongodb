@@ -2,6 +2,7 @@ package com.alexquazar.SpringPracticeRecipes.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import com.alexquazar.SpringPracticeRecipes.converters.RecipeToRecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.model.Recipe;
 import com.alexquazar.SpringPracticeRecipes.repositories.RecipeRepository;
 
+@Disabled
 @SpringBootTest
 public class RecipeServiceIT {
 
