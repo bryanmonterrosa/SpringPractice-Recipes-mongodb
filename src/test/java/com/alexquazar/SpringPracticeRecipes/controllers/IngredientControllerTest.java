@@ -5,7 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -25,6 +26,8 @@ import com.alexquazar.SpringPracticeRecipes.commands.RecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.services.IngredientService;
 import com.alexquazar.SpringPracticeRecipes.services.RecipeService;
 import com.alexquazar.SpringPracticeRecipes.services.UnitOfMeasureService;
+
+import reactor.core.publisher.Flux;
 
 public class IngredientControllerTest {
 
@@ -89,7 +92,7 @@ public class IngredientControllerTest {
 
         // when
         when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just());
 
         // then
         mockMvc.perform(get("/recipe/1/ingredient/new"))
@@ -109,7 +112,7 @@ public class IngredientControllerTest {
 
         // when
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just());
 
         // then
         mockMvc.perform(get("/recipe/1/ingredient/2/update"))

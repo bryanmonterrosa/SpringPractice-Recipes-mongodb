@@ -1,10 +1,10 @@
 package com.alexquazar.SpringPracticeRecipes.services;
 
-import java.util.Set;
-
 import com.alexquazar.SpringPracticeRecipes.commands.UnitOfMeasureCommand;
+
+import reactor.core.publisher.Flux;
 
 public interface UnitOfMeasureService {
 
-    Set<UnitOfMeasureCommand> listAllUoms();
+    Flux<UnitOfMeasureCommand> listAllUoms();
 }
