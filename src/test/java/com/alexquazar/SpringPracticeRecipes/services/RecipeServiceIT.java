@@ -14,7 +14,6 @@ import com.alexquazar.SpringPracticeRecipes.converters.RecipeToRecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.model.Recipe;
 import com.alexquazar.SpringPracticeRecipes.repositories.RecipeRepository;
 
-@Disabled
 @SpringBootTest
 public class RecipeServiceIT {
 
@@ -31,10 +30,9 @@ public class RecipeServiceIT {
 
     @Autowired
     RecipeToRecipeCommand recipeToRecipeCommand;
-
-    @Transactional
+    
     @Test
-    public void testSaveOfDescription() throws Exception {
+    public void testSaveOfDescription() {
         //given
         Iterable<Recipe> recipes = recipeRepository.findAll();
         Recipe testRecipe = recipes.iterator().next();

@@ -39,7 +39,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
  
       # run tests!
-      - run: mvn test 
+      - run: mvn integration-test 
       
       # Codecov coverage is being uploaded via Google Cloud Build
       # - codecov/upload
