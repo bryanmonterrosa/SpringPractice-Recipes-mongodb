@@ -1,6 +1,6 @@
 version: 2.1
-orbs:
-  codecov: codecov/codecov@3
+# orbs:
+#   codecov: codecov/codecov@3
 
 jobs:
   build:
@@ -41,4 +41,5 @@ jobs:
       # run tests!
       - run: mvn test 
       
-      - codecov/upload
+      # Codecov coverage is being uploaded via Google Cloud Build
+      # - codecov/upload
