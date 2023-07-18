@@ -11,8 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.HashSet;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,6 +26,7 @@ import com.alexquazar.SpringPracticeRecipes.services.RecipeService;
 import com.alexquazar.SpringPracticeRecipes.services.UnitOfMeasureService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class IngredientControllerTest {
 
@@ -75,7 +74,8 @@ public class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
         // when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString()))
+                .thenReturn(Mono.just(ingredientCommand));
 
         // then
         mockMvc.perform(get("/recipe/1/ingredient/2/show"))
@@ -111,7 +111,8 @@ public class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
         // when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString()))
+                .thenReturn(Mono.just(ingredientCommand));
         when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just());
 
         // then
@@ -130,7 +131,7 @@ public class IngredientControllerTest {
         command.setRecipeId("2");
 
         // when
-        when(ingredientService.saveIngredientCommand(any())).thenReturn(command);
+        when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.just(command));
 
         // then
         mockMvc.perform(post("/recipe/2/ingredient")
@@ -144,6 +145,8 @@ public class IngredientControllerTest {
 
     @Test
     public void testDeleteIngredient() throws Exception {
+
+        when(ingredientService.deleteById(anyString(), anyString())).thenReturn(Mono.empty());
 
         //then
         mockMvc.perform(get("/recipe/2/ingredient/3/delete")
