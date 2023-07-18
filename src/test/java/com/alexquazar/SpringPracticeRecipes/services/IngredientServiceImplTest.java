@@ -22,7 +22,6 @@ import com.alexquazar.SpringPracticeRecipes.converters.UnitOfMeasureCommandToUni
 import com.alexquazar.SpringPracticeRecipes.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.alexquazar.SpringPracticeRecipes.model.Ingredient;
 import com.alexquazar.SpringPracticeRecipes.model.Recipe;
-import com.alexquazar.SpringPracticeRecipes.repositories.RecipeRepository;
 import com.alexquazar.SpringPracticeRecipes.repositories.reactive.RecipeReactiveRepository;
 import com.alexquazar.SpringPracticeRecipes.repositories.reactive.UnitOfMeasureReactiveRepository;
 
@@ -35,9 +34,6 @@ public class IngredientServiceImplTest {
 
     @Mock
     RecipeReactiveRepository recipeReactiveRepository;
-
-    @Mock
-    RecipeRepository recipeRepository;
 
     @Mock
     UnitOfMeasureReactiveRepository unitOfMeasureRepository;
@@ -57,7 +53,7 @@ public class IngredientServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient,
-                recipeReactiveRepository, unitOfMeasureRepository, recipeRepository);
+                recipeReactiveRepository, unitOfMeasureRepository);
     }
 
     @Test
@@ -82,7 +78,6 @@ public class IngredientServiceImplTest {
         recipe.addIngredient(ingredient1);
         recipe.addIngredient(ingredient2);
         recipe.addIngredient(ingredient3);
-        Optional<Recipe> recipeOptional = Optional.of(recipe);
 
         when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 
@@ -96,48 +91,46 @@ public class IngredientServiceImplTest {
 
     @Test
     public void testSaveRecipeCommand() throws Exception {
-        // given
+        //given
         IngredientCommand command = new IngredientCommand();
         command.setId("3");
         command.setRecipeId("2");
         command.setUom(new UnitOfMeasureCommand());
         command.getUom().setId("1234");
 
-        Optional<Recipe> recipeOptional = Optional.of(new Recipe());
-
         Recipe savedRecipe = new Recipe();
         savedRecipe.addIngredient(new Ingredient());
         savedRecipe.getIngredients().iterator().next().setId("3");
 
-        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(new Recipe()));
         when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
 
-        // when
+        //when
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 
-        // then
+        //then
         assertEquals("3", savedCommand.getId());
-        verify(recipeRepository, times(1)).findById(anyString());
+        verify(recipeReactiveRepository, times(1)).findById(anyString());
         verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
 
     }
 
     @Test
     public void testDeleteById() throws Exception {
-        // given
+        //given
         Recipe recipe = new Recipe();
         Ingredient ingredient = new Ingredient();
         ingredient.setId("3");
         recipe.addIngredient(ingredient);
-        Optional<Recipe> recipeOptional = Optional.of(recipe);
+        
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(recipe));
 
-        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
-
-        // when
+        //when
         ingredientService.deleteById("1", "3");
 
-        // then
-        verify(recipeRepository, times(1)).findById(anyString());
-        verify(recipeRepository, times(1)).save(any(Recipe.class));
+        //then
+        verify(recipeReactiveRepository, times(1)).findById(anyString());
+        verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
     }
 }
