@@ -1,19 +1,20 @@
 package com.alexquazar.SpringPracticeRecipes.services;
 
-import java.util.Set;
-
 import com.alexquazar.SpringPracticeRecipes.commands.RecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.model.Recipe;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 public interface RecipeService {
 
-    Set<Recipe> getRecipes();
+    Flux<Recipe> getRecipes();
 
-    Recipe findById(String l);
+    Mono<Recipe> findById(String l);
 
-    RecipeCommand findCommandById(String l);
+    Mono<RecipeCommand> findCommandById(String l);
 
-    RecipeCommand saveRecipeCommand(RecipeCommand command);
+    Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command);
 
     void deleteById(String idToDelete);
 }

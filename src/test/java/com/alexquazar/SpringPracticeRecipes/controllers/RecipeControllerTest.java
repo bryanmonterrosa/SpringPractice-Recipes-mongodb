@@ -1,7 +1,6 @@
 package com.alexquazar.SpringPracticeRecipes.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,6 +23,8 @@ import com.alexquazar.SpringPracticeRecipes.commands.RecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.exceptions.NotFoundException;
 import com.alexquazar.SpringPracticeRecipes.model.Recipe;
 import com.alexquazar.SpringPracticeRecipes.services.RecipeService;
+
+import reactor.core.publisher.Mono;
 
 public class RecipeControllerTest {
 
@@ -50,7 +51,7 @@ public class RecipeControllerTest {
         Recipe recipe = new Recipe();
         recipe.setId("1");
 
-        when(recipeService.findById(anyString())).thenReturn(recipe);
+        when(recipeService.findById(anyString())).thenReturn(Mono.just(recipe));
 
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())
@@ -83,7 +84,7 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
-        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+        when(recipeService.saveRecipeCommand(any())).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -99,7 +100,7 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
-        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+        when(recipeService.saveRecipeCommand(any())).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -117,7 +118,7 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())

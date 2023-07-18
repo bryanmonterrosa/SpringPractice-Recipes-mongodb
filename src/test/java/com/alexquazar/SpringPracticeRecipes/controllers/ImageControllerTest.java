@@ -2,7 +2,6 @@ package com.alexquazar.SpringPracticeRecipes.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,7 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +24,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.alexquazar.SpringPracticeRecipes.commands.RecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.services.ImageService;
 import com.alexquazar.SpringPracticeRecipes.services.RecipeService;
+
+import reactor.core.publisher.Mono;
 
 public class ImageControllerTest {
 
@@ -55,7 +55,7 @@ public class ImageControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("1");
 
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         // when
         mockMvc.perform(get("/recipe/1/image"))
@@ -96,7 +96,7 @@ public class ImageControllerTest {
 
         command.setImage(bytesBoxed);
 
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         // when
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
