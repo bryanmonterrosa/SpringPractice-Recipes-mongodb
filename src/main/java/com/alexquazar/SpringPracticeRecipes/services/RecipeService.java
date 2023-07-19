@@ -1,5 +1,7 @@
 package com.alexquazar.SpringPracticeRecipes.services;
 
+import java.util.concurrent.ExecutionException;
+
 import com.alexquazar.SpringPracticeRecipes.commands.RecipeCommand;
 import com.alexquazar.SpringPracticeRecipes.model.Recipe;
 
@@ -16,5 +18,5 @@ public interface RecipeService {
 
     Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command);
 
-    void deleteById(String idToDelete);
+    void deleteById(String idToDelete) throws InterruptedException, ExecutionException;
 }

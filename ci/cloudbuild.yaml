@@ -77,20 +77,20 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', '$LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb']
   # Deploy container image to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args: [
-      'run', 
-      'deploy', 
-      'springboot-recipes', 
-      '--image', 
-      '$LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb', 
-      '--region', 
-      '$LOCATION'
-      ,'--allow-unauthenticated'
-      ,'--max-instances'
-      ,'10'
-      ,'--memory'
-      ,'1024Mi']
+  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  #   entrypoint: gcloud
+  #   args: [
+  #     'run', 
+  #     'deploy', 
+  #     'springboot-recipes', 
+  #     '--image', 
+  #     '$LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb', 
+  #     '--region', 
+  #     '$LOCATION'
+  #     ,'--allow-unauthenticated'
+  #     ,'--max-instances'
+  #     ,'10'
+  #     ,'--memory'
+  #     ,'1024Mi']
 images:
   - $LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb

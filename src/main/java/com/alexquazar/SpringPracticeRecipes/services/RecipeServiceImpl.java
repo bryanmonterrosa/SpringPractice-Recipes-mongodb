@@ -1,6 +1,7 @@
 package com.alexquazar.SpringPracticeRecipes.services;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Service;
 
@@ -68,8 +69,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteById(String idToDelete) {
-        recipeReactiveRepository.deleteById(idToDelete).block();
+    public void deleteById(String idToDelete) throws InterruptedException, ExecutionException {
+        recipeReactiveRepository.deleteById(idToDelete).toFuture().get();
     }
 
 }

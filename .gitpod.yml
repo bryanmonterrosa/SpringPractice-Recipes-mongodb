@@ -10,8 +10,6 @@ tasks:
 
 vscode:
   extensions:
-    - pivotal.vscode-boot-dev-pack
-    - pivotal.vscode-spring-boot
     - redhat.java
     - vscjava.vscode-java-debug
     - vscjava.vscode-java-dependency
