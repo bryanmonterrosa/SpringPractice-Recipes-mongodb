@@ -69,3 +69,28 @@ steps:
   - name: "gcr.io/cloud-builders/curl"
     entrypoint: "./codecov"
     args: ["-t", "$_CODECOV_TOKEN","-C","$COMMIT_SHA"]
+
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '$LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb', '.']
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '$LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb']
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 
+      'deploy', 
+      'springboot-recipes', 
+      '--image', 
+      '$LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb', 
+      '--region', 
+      '$LOCATION'
+      ,'--allow-unauthenticated'
+      ,'--max-instances'
+      ,'10'
+      ,'--memory'
+      ,'1024Mi']
+images:
+  - $LOCATION-docker.pkg.dev/$PROJECT_ID/$_ARTIFACT_REG_REPO/springboot-recipes-mongodb

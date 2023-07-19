@@ -35,7 +35,7 @@ public class RecipeController {
 
         model.addAttribute("recipe", recipeService.findById(id).block());
 
-        return "/recipe/show";
+        return "recipe/show";
     }
 
     @GetMapping("/recipe/new")

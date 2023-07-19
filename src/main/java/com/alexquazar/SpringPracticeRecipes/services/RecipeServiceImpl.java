@@ -1,5 +1,7 @@
 package com.alexquazar.SpringPracticeRecipes.services;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.alexquazar.SpringPracticeRecipes.commands.RecipeCommand;
@@ -58,7 +60,9 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command) {
-
+        if (command.getId().length() <= 0) {
+            command.setId(UUID.randomUUID().toString());
+        }
         return recipeReactiveRepository.save(recipeCommandToRecipe.convert(command))
                 .map(recipeToRecipeCommand::convert);
     }
